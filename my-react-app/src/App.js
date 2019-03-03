@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import IWA from './IWA/IWA.js';
 
 class App extends Component {
+
+  static questions = [
+    {
+      question: "What is your name?",
+      picture: "",
+    },
+    {
+      question: "What is the position you are applying for?",
+      picture: "",
+    },
+    {
+      question: "What qualifies you for this position?",
+      picture: "",
+    },
+  ];
+
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <IWA 
+          questions={App.questions}
+          finalText={null}
+          finalPic={null}
+        />
       </div>
     );
   }
