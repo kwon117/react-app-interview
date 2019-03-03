@@ -10,9 +10,11 @@ const iconFinal = process.env.PUBLIC_URL + 'images/final-pic.jpg';
 const Container = styled.div`
   max-width: 700px;
   height: 100%;
-  padding: 100px;
   box-sizing: border-box;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default class IWA extends Component {
@@ -61,9 +63,6 @@ export default class IWA extends Component {
     const submission = this.questions.map((question, index) => {
       return { ...question, response: this.state.responses[index]};
     });
-    if (this.props.finish) {
-      this.props.finish(submission);
-    }
     return submission;
   }
   
@@ -79,13 +78,22 @@ export default class IWA extends Component {
     });
   }
 
-  get final() {
+  onAnswerFinal = () => {
+    if (this.props.finish) {
+      this.props.finish(this.getSubmission());
+    }
+  }
+
+  get done() {
     return this.state.currentQuestion === this.questions.length;
   }
 
+  get isFinalQuestion() {
+    return this.state.currentQuestion === this.questions.length - 1;
+  }
+
   renderBody() {
-    console.log(this.state.responses);
-    if (this.final) {
+    if (this.done) {
       return (
         <IWResponses
           submission={this.getSubmission()}
@@ -102,6 +110,8 @@ export default class IWA extends Component {
           savedAnswer={this.state.responses[this.state.currentQuestion]}
           disableBackButton={this.props.noEdits || this.state.currentQuestion === 0}
           setAnswer={this.setAnswer(this.state.currentQuestion)}
+          isFinalQuestion={this.isFinalQuestion}
+          onAnswerFinal={this.onAnswerFinal}
           goBack={this.goBack}
           goNext={this.goNext}
         />

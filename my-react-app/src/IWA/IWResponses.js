@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from './IWQuestion.js';
+import {
+  Button,
+  Container,
+  Spacer,
+} from './IWQuestion.js';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const FinalText = styled.div`
   width: 100%;
-  height: 100%;
-  justify-content: space-around;
-  align-items: center;
+  text-align: center;
 `;
-
-const Image = styled.img`
-  max-width: 100px;
-  max-height: auto;
-`;
-
-const FinalText = styled.div``;
 
 const ResponseBlock = styled.div`
   width: 100%;
@@ -41,28 +34,17 @@ const Response = styled.div`
   width: 100%;
   padding: 2px;
   box-sizing: border-box;
-  font-size: inherit;
-  font-family: inherit;
   text-align: center;
   background-color: #D5E8D4;
 `;
 
 const ButtonContainer = styled.div`
-  justify-content: space-between;
   width: 100%;
 `;
 
-const Button = styled.button`
-  border: none;
-  display: ${props => props.hidden ? "disabled" : "inline-block"};
-  background-color: ${props => buttonStyles[props.type].bg};
-  border-color: ${props => buttonStyles[props.type].border};
-  border-width: .33em;
-  border-style: solid;
-  padding: .33em 1em;
-`;
-
 export default class IWResponses extends Component {
+  static blankAnswer = "You have left this question blank";
+
   renderFinalText() {
     if (this.props.finalText) {
       return (
@@ -73,8 +55,6 @@ export default class IWResponses extends Component {
     }
     return null;
   }
-
-  static blankAnswer = "You have left this question blank";
 
   renderQuestions() {
     return this.props.submission.map((question) => {
@@ -89,8 +69,8 @@ export default class IWResponses extends Component {
 
   render() {
     return (
-      <Container>
-        <Image src={this.props.finalPic} />
+      <Container img={this.props.finalPic}>
+        <Spacer />
         {this.renderFinalText()}
         {this.renderQuestions()}
         <ButtonContainer>

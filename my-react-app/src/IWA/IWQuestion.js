@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 500px;
   height: 100%;
   justify-content: space-around;
   align-items: center;
+  box-sizing: border-box;
+  background-image: url(${props => props.img});
+  background-position: 50% 10%;
+  background-size: 100px auto;
+  background-repeat: no-repeat;
 `;
 
-const Image = styled.img`
-  max-width: 100px;
-  max-height: auto;
+export const Spacer = styled.div`
+  width: 100%;
+  height: 100px;
 `;
 
 const Question = styled.div`
@@ -45,7 +51,7 @@ const ButtonsContainer = styled.div`
   width: 100%;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   border: none;
   display: ${props => props.hidden ? "disabled" : "inline-block"};
   background-color: ${props => buttonStyles[props.type].bg};
@@ -55,7 +61,7 @@ const Button = styled.button`
   padding: .33em 1em;
 `;
 
-export const buttonStyles = {
+const buttonStyles = {
   back: {
     bg: "#F8CECC",
     border: "#B95551",
@@ -92,6 +98,9 @@ export default class IWQuestion extends Component {
 
   onNext = () => {
     this.props.setAnswer(this.state.answer);
+    if (this.props.isFinalQuestion) {
+      this.props.onAnswerFinal();
+    }
     this.props.goNext();
   }
 
@@ -104,8 +113,8 @@ export default class IWQuestion extends Component {
 
   render() {
     return (
-      <Container>
-        <Image src={this.props.question.img} />
+      <Container img={this.props.question.img}>
+        <Spacer/>
         <Question>
           {this.props.question.questionText}
         </Question>
