@@ -1,30 +1,54 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import IWResponses from './IWResponses.js'
+import IWQuestion from './IWQuestion.js'
+const iconAccurateRetina = process.env.PUBLIC_URL + 'images/icon-accurate-retina.png';
+const iconAuditSupportRetina = process.env.PUBLIC_URL + 'images/icon-audit-support-retina.png';
+const iconMaxRefundRetina = process.env.PUBLIC_URL + 'images/icon-max-refund-retina.png';
+const iconFinal = process.env.PUBLIC_URL + 'images/final-pic.jpg';
 
 const Container = styled.div`
   max-width: 700px;
+  height: 100%;
+  padding: 100px;
 `;
 
 export default class IWA extends Component {
-  propTypes = {
-    questions: [],
-    finalText: "",
-    finalPic: "",
-    finish: () => {},
-    noEdits: false,
-  };
-
   constructor(props) {
     super(props);
     this.state = {
       currentQuestion: 0,
       responses: [],
     }
+    this.questions = this.props.questions || IWA.defaultQuestions;
+    this.finalText = this.props.finalText || IWA.defaultFinalText
+    this.finalPic = this.props.finalPic || IWA.defaultFinalPic;
   };
+  
+  static defaultFinalText = "Thank you, you will receive a response shortly.";
+  static defaultFinalPic = iconFinal;
+  static defaultQuestions = [
+    {
+      questionText: "What is your name?",
+      img: iconAccurateRetina,
+      placeholder: "First Last",
+    },
+    {
+      questionText: "What is the position you are applying for?",
+      img: iconAuditSupportRetina,
+      placeholder: "Job Title",
+    },
+    {
+      questionText: "What qualifies you for this position?",
+      img: iconMaxRefundRetina,
+      placeholder: "I am awesome!",
+    },
+  ];
+
 
   setAnswer = (index) => {
     return (answer) => {
-      const repsonses = [...this.state.responses];
+      const responses = [...this.state.responses];
       responses[index] = answer;
       this.setState({ responses });
     }
@@ -32,43 +56,50 @@ export default class IWA extends Component {
   }
 
   getSubmission() {
+    const submission = this.questions.map((question, index) => {
+      return { ...question, response: this.state.responses[index]};
+    });
     if (this.props.finish) {
-      this.props.finish();
+      this.props.finish(submission);
     }
+    return submission;
   }
   
   goBack = () => {
     this.setState({
-      currentQuestion: this.state.currentQuestion--,
+      currentQuestion: this.state.currentQuestion - 1,
     });
   }
 
   goNext = () => {
     this.setState({
-      currentQuestion: this.state.currentQuestion++,
+      currentQuestion: this.state.currentQuestion + 1,
     });
   }
 
   get final() {
-    return this.state.currentQuestion === this.props.questions.length;
+    return this.state.currentQuestion === this.questions.length;
   }
 
   renderBody() {
+    console.log(this.state.responses);
     if (this.final) {
       return (
-        <IWAResponses
+        <IWResponses
           submission={this.getSubmission()}
-          finalText={this.props.finalText}
-          finalPic={this.props.finalPic}
+          finalText={this.finalText}
+          finalPic={this.finalPic}
           editable={!this.props.noEdits}
+          goBack={this.goBack}
         />
       );
     } else {
       return (
-        <IWAQuestion
-          question={this.props.questions[this.state.currentQuestion]}
+        <IWQuestion
+          question={this.questions[this.state.currentQuestion]}
+          savedAnswer={this.state.responses[this.state.currentQuestion]}
           disableBackButton={this.props.noEdits || this.state.currentQuestion === 0}
-          setAnswer={this.setAnswer(this.state.currentIndex)}
+          setAnswer={this.setAnswer(this.state.currentQuestion)}
           goBack={this.goBack}
           goNext={this.goNext}
         />
