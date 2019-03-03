@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import IWA from './IWA/IWA.js';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+`;
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <Container>
         <IWA 
           finalText={null}
           finalPic={null}
         />
-      </div>
+      </Container>
     );
   }
 }

@@ -11,6 +11,8 @@ const Container = styled.div`
   max-width: 700px;
   height: 100%;
   padding: 100px;
+  box-sizing: border-box;
+  flex-grow: 1;
 `;
 
 export default class IWA extends Component {

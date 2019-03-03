@@ -17,12 +17,26 @@ const Image = styled.img`
 
 const Question = styled.div`
   width: 100%;
+  border-color: #cecece;
+  border-style: solid;
+  border-width: .33em;
+  padding: 15px;
+  box-sizing: border-box;
 `;
 
 const AnswerField = styled.textarea`
   display: block;
   width: 100%;
+  height: 58px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  border-style: solid;
+  border-color: #7EA6E0;
+  border-width: .33em;
+  padding: 2px;
+  font-size: inherit;
+  font-family: inherit;
 `;
 
 const ButtonsContainer = styled.div`
@@ -32,8 +46,25 @@ const ButtonsContainer = styled.div`
 `;
 
 const Button = styled.button`
+  border: none;
   display: ${props => props.hidden ? "disabled" : "inline-block"};
+  background-color: ${props => buttonStyles[props.type].bg};
+  border-color: ${props => buttonStyles[props.type].border};
+  border-width: .33em;
+  border-style: solid;
+  padding: .33em 1em;
 `;
+
+export const buttonStyles = {
+  back: {
+    bg: "#F8CECC",
+    border: "#B95551",
+  },
+  next: {
+    bg: "#D5E8D4",
+    border: "#82B366",
+  },
+};
 
 export default class IWQuestion extends Component {
   constructor(props) {
@@ -64,6 +95,13 @@ export default class IWQuestion extends Component {
     this.props.goNext();
   }
 
+  onKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      this.onNext();
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -75,7 +113,8 @@ export default class IWQuestion extends Component {
           value={this.state.answer}
           placeholder={this.state.placeholder}
           onChange={this.onAnswerChange}
-        ></AnswerField>
+          onKeyPress={this.onKeyPress}
+        />
         <ButtonsContainer backButton={!this.props.disableBackButton}>
           <Button
             type={"back"}
